@@ -1,5 +1,6 @@
 const fs = require("fs");
 const Tour = require("../Models/tourModel");
+const { json } = require("stream/consumers");
 
 exports.checkPrice = (req, res, next) => {
   if (!req.body.price || !req.body.name) {
@@ -31,6 +32,8 @@ exports.getAllTours = async (req, res) => {
     let queryObj = { ...req.query };
 
     console.log(queryObj);
+
+    let queryString = JSON.stringify(queryObj);
 
     const excludedFields = ["limit", "sort", "page"];
 

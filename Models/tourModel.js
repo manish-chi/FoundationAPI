@@ -23,7 +23,8 @@ const tourSchema = new mongoose.Schema({
       validator: function (val) {
         return val > 0;
       },
-      message : (props) => `price must be greater than 0, but got ${props.value}`,
+      message: (props) =>
+        `price must be greater than 0, but got ${props.value}`,
     },
     required: [true, "price must be number"],
   },
