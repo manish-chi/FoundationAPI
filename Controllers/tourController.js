@@ -74,8 +74,7 @@ exports.getTour = catchAsync(async (req, res) => {
       count: tour.length,
       data: tour,
     });
-  }
-});
+  });
 
 exports.deleteTour = catchAsync(async (req, res) => {
     const tour = await Tour.findByIdAndDelete(req.params.id);
