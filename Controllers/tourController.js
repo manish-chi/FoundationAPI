@@ -2,6 +2,20 @@ const fs = require("fs");
 const Tour = require("../Models/tourModel");
 const { json } = require("stream/consumers");
 
+exports.top5CheapTours = async (req, res, next) => {
+  let query = Tour.find();
+  query = query.sort({ price: -1 });
+  query = query.limit(5);
+  let tours = await query;
+
+  return res.status(200).json({
+    status: "success",
+    data: tours,
+  });
+
+  next();
+};
+
 exports.checkPrice = (req, res, next) => {
   if (!req.body.price || !req.body.name) {
     return res.status(400).json({

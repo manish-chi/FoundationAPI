@@ -3,6 +3,8 @@ const tourController = require("../Controllers/tourController");
 
 const tourRouter = express.Router();
 
+tourRouter.route("/top-5-cheap-tours").get(tourController.top5CheapTours);
+
 tourRouter
   .route("/")
   .post(tourController.checkPrice, tourController.createTour)
