@@ -21,6 +21,20 @@ const conn = mongoose
     console.log(`${err}`);
   });
 
+process.on("unhandledRejection", function (err) {
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+process.on("uncaughtException", (err) => {
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
 let server = app.listen(process.env.PORT, () => {
   console.log(`server connection established at ${process.env.PORT}`);
 });
