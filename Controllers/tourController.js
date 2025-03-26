@@ -43,12 +43,10 @@ exports.getAllTours = catchAsync(async (req, res) => {
   let query = Tour.find(queryObj);
 
   if (req.query.limit) {
-    console.log(req.query.limit);
     query = query.limit(req.query.limit);
   }
 
   if (req.query.sort) {
-    console.log(req.query.sort);
     query = query.sort(req.query.sort.split(",").join(" "));
   }
 
@@ -65,37 +63,36 @@ exports.getAllTours = catchAsync(async (req, res) => {
 });
 
 exports.getTour = catchAsync(async (req, res) => {
-    if (req.params.id == null) throw new Error("request id is missing");
+  if (req.params.id == null) throw new Error("request id is missing");
 
-    const tour = await Tour.findById(req.params.id);
+  const tour = await Tour.findById(req.params.id);
 
-    return res.status(200).json({
-      status: 200,
-      count: tour.length,
-      data: tour,
-    });
+  return res.status(200).json({
+    status: 200,
+    count: tour.length,
+    data: tour,
   });
-
-exports.deleteTour = catchAsync(async (req, res) => {
-    const tour = await Tour.findByIdAndDelete(req.params.id);
-
-    if (tour == null) throw new Error("Unable to find tour with given id");
-
-    return res.status(200).json({
-      status: 200,
-      data: tour,
-    });
 });
 
-exports.updateTour =catchAsync(async (req, res) => {
+exports.deleteTour = catchAsync(async (req, res) => {
+  const tour = await Tour.findByIdAndDelete(req.params.id);
 
-    let tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+  if (tour == null) throw new Error("Unable to find tour with given id");
 
-    return res.status(201).json({
-      status: "success",
-      data: tour,
-    });
+  return res.status(200).json({
+    status: 200,
+    data: tour,
   });
+});
+
+exports.updateTour = catchAsync(async (req, res) => {
+  let tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  return res.status(201).json({
+    status: "success",
+    data: tour,
+  });
+});
