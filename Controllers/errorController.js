@@ -1,4 +1,4 @@
-function sendErrorDev(err, req, res) {
+function sendErrorDev(err, res) {
   return res.status(err.statusCode).json({
     status: err.status,
     error: err,
@@ -7,7 +7,7 @@ function sendErrorDev(err, req, res) {
   });
 }
 
-function sendErrorProd(err, req, res) {
+function sendErrorProd(err, res) {
   if (err.isOperational) {
     return res.status(err.statusCode).json({
       status: err.status,
@@ -21,14 +21,30 @@ function sendErrorProd(err, req, res) {
   });
 }
 
+function sendErrorDuplicates(err, res) {
+  return res.status(400).json({
+    status: err.status,
+    message: `${JSON.stringify(
+      err.keyValue
+    )} is found to be duplicate. Please provide another ${JSON.stringify(
+      err.keyValue
+    )}`,
+  });
+}
+
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status;
 
   if (process.env.NODE_ENV == "development") {
-    sendErrorDev(err, req, res);
+    sendErrorDev(err, res);
   } else if (process.env.NODE_ENV == "production") {
-    sendErrorProd(err, req, res);
+    console.log(err.statusCode);
+    if (err.code === 11000) {
+      sendErrorDuplicates(err, res);
+    } else {
+      sendErrorProd(err, res);
+    }
   }
   next();
 };
