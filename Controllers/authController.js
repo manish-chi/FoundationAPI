@@ -104,8 +104,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
       message: URL,
     };
 
-    console.log(req);
-
     await sendMail(options);
 
     return res.status(200).json({
@@ -186,6 +184,17 @@ function sendJWTToken(user, res) {
   const token = jwt.sign({ id: user._id.toString() }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
+
+  const cookieOptions = {
+    httpOnly: true,
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+  };
+
+  if (process.env.NODE_ENV == "production") cookieOptions.secure = true;
+
+  res.cookie("jwt", token, cookieOptions);
 
   return res.status(200).json({
     status: "success",
