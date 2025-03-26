@@ -4,12 +4,18 @@ const authController = require("../Controllers/authController");
 
 const tourRouter = express.Router();
 
+tourRouter.use(authController.protect);
+
 tourRouter.route("/top-5-cheap-tours").get(tourController.top5CheapTours);
 
 tourRouter
   .route("/")
-  .post(tourController.checkPrice, tourController.createTour)
-  .get(authController.protect, tourController.getAllTours);
+  .post(
+    authController.restrictTo(["admin"]),
+    tourController.checkPrice,
+    tourController.createTour
+  )
+  .get(tourController.getAllTours);
 
 tourRouter
   .route("/:id")

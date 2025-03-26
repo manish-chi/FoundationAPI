@@ -59,7 +59,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  let user = await UserModel.findOne({ _id: decoded.id });
+  let user = await userModel.findOne({ _id: decoded.id });
 
   if (!user) {
     next(new AppError("User with email address doesnt exists!", 403));
