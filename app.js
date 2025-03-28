@@ -30,13 +30,21 @@ if (process.env.NODE_ENV == "development") {
   app.use(morgan("dev"));
 }
 
+<<<<<<< HEAD
 // const limiter = rateLimit({
 //   windowMs: 100,
 //   max: 1,
 //   message: "Too many requests from this IP, please try again later.",
 // });
+=======
+const limiter = rateLimit({
+  windowMs: 100,
+  max: 1,
+  message: "Too many requests from this IP, please try again later.",
+});
+>>>>>>> authentication
 
-// app.use(limiter);
+app.use(limiter);
 
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
