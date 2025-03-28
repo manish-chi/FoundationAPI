@@ -9,7 +9,11 @@ reviewRouter.use(authController.protect);
 
 reviewRouter
   .route("/")
-  .post(authController.restrictTo(["user"]), reviewController.addReview)
+  .post(
+    authController.restrictTo(["user"]),
+    reviewController.setTourUserIds,
+    reviewController.addReview
+  )
   .get(reviewController.getReviews);
 
 reviewRouter

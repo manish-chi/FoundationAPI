@@ -1,21 +1,14 @@
-let catchAsync = require("../Utilities/catchAsync");
+const catchAsync = require("../Utilities/catchAsync");
 const userModel = require("../Models/userModel");
+const factory = require("../Controllers/handlerFactory");
 
-exports.deleteUser = catchAsync(async (req, res, next) => {
-  const id = req.params.id;
+exports.deleteUser = factory.deleteOne(userModel);
 
-  const user = await userModel.findByIdAndDelete({ _id: id });
+exports.UpdateUser = factory.updateOne(userModel);
 
-  if (!user) next(new AppError("user no longer exits", 400));
+exports.getAll = factory.getAll(userModel, "name email");
 
-  return res.status(200).json({
-    status: "success",
-    message: "user has been deleted",
-    data: user,
-  });
-});
-
-exports.UpdateUser = catchAsync(async (req, res, next) => {});
+exports.getOne = factory.getOne(userModel);
 
 exports.Me = catchAsync(async (req, res, next) => {
   return res.status(200).json({
