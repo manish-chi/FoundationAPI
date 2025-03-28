@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: {
-      values: ["admin", "user", "lead-guide"],
+      values: ["admin", "user", "guide"],
       message: "value can be admin,user or lead-guide",
     },
   },
