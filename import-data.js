@@ -25,10 +25,7 @@ const conn = mongoose
     console.log(`${err}`);
   });
 
-let tours = fs.readFileSync(
-  `${__dirname}/dev-data/data/tours-simple.json`,
-  "utf-8"
-);
+let tours = fs.readFileSync(`${__dirname}/dev-data/data/tours.json`, "utf-8");
 
 async function insertData() {
   try {
@@ -49,6 +46,8 @@ async function deleteData() {
 
 if (process.argv[2] == "--import") {
   insertData();
+  process.exit(0);
 } else if (process.argv[2] == "--delete") {
   deleteData();
+  process.exit(0);
 }

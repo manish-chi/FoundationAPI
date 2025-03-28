@@ -15,7 +15,7 @@ exports.signup = catchAsync(async (req, res) => {
     passwordConfirm: passwordConfirm,
   };
 
-  const user = await UserModel.create(newUserData);
+  const user = await userModel.create(newUserData);
 
   sendJWTToken(user, res);
 });
@@ -59,27 +59,33 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+<<<<<<< Updated upstream
   let user = await UserModel.findOne({ _id: decoded.id });
+=======
+  let currentUser = await userModel.findOne({ _id: decoded.id });
+>>>>>>> Stashed changes
 
-  if (!user) {
+  if (!currentUser) {
     next(new AppError("User with email address doesnt exists!", 403));
   }
 
-  if (!user.checkPasswordChangedAt(decoded.iat)) {
+  if (!currentUser.checkPasswordChangedAt(decoded.iat)) {
     next(new AppError("User has changed his/her password, Please login again"));
   }
 
-  req.user = user;
+  req.user = currentUser;
 
   next();
 });
 
 exports.restrictTo = (roles) => {
-  return catchAsync((req, res, next) => {
+  return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       next(new AppError("User is not permitted to access this route", 401));
     }
-  });
+
+    next();
+  };
 };
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
