@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
+    required: true,
     enum: {
       values: ["admin", "user", "guide"],
       message: "value can be admin,user or lead-guide",
@@ -84,6 +85,6 @@ userSchema.methods.checkPasswordChangedAt = async function (jwtTimeStamp) {
   return jwtTimeStamp < changedTimeStamp ? true : false;
 };
 
-const userModel = mongoose.model("FoundationUser", userSchema);
+const userModel = mongoose.model("foundationUsers", userSchema);
 
 module.exports = userModel;

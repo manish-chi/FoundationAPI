@@ -6,13 +6,14 @@ const sendMail = require("../Utilities/nodeMailer");
 const crypto = require("crypto");
 
 exports.signup = catchAsync(async (req, res) => {
-  let { email, name, password, passwordConfirm } = { ...req.body };
+  let { email, name, password, passwordConfirm, role } = { ...req.body };
 
   let newUserData = {
     email: email,
     name: name,
     password: password,
     passwordConfirm: passwordConfirm,
+    role: role,
   };
 
   const user = await userModel.create(newUserData);
@@ -62,7 +63,12 @@ exports.protect = catchAsync(async (req, res, next) => {
   let currentUser = await userModel.findOne({ _id: decoded.id });
 
   if (!currentUser) {
-    next(new AppError("User with email address doesnt exists!", 403));
+    next(
+      new AppError(
+        "You are not authorized to access this route, please try to login again, if problem persists please contact admin",
+        403
+      )
+    );
   }
 
   if (!currentUser.checkPasswordChangedAt(decoded.iat)) {
@@ -77,7 +83,16 @@ exports.protect = catchAsync(async (req, res, next) => {
 exports.restrictTo = (roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      next(new AppError("User is not permitted to access this route", 401));
+      next(
+        new AppError(
+          `${
+            req.user.role
+          } is not permitted to access this route. This route is permitted to ${roles
+            .join(",")
+            .toString()}`,
+          401
+        )
+      );
     }
 
     next();

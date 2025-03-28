@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const tourRouter = require("./Routers/tourRouter");
 const userRouter = require("./Routers/userRouter");
+const reviewRouter = require("./Routers/reviewRouter");
 const globalErrorHandler = require("./Controllers/errorController");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
@@ -30,24 +31,17 @@ if (process.env.NODE_ENV == "development") {
   app.use(morgan("dev"));
 }
 
-<<<<<<< HEAD
-// const limiter = rateLimit({
-//   windowMs: 100,
-//   max: 1,
-//   message: "Too many requests from this IP, please try again later.",
-// });
-=======
 const limiter = rateLimit({
   windowMs: 100,
   max: 1,
   message: "Too many requests from this IP, please try again later.",
 });
->>>>>>> authentication
 
 app.use(limiter);
 
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/reviews", reviewRouter);
 
 app.use(globalErrorHandler);
 

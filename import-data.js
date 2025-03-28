@@ -30,6 +30,7 @@ let tours = fs.readFileSync(`${__dirname}/dev-data/data/tours.json`, "utf-8");
 async function insertData() {
   try {
     await tourModel.create(JSON.parse(tours));
+    console.log("data has been imported");
   } catch (err) {
     console.log(err.message);
   }
@@ -45,9 +46,8 @@ async function deleteData() {
 }
 
 if (process.argv[2] == "--import") {
+  console.log("Ye!!!!");
   insertData();
-  process.exit(0);
 } else if (process.argv[2] == "--delete") {
   deleteData();
-  process.exit(0);
 }

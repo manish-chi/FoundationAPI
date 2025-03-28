@@ -97,7 +97,7 @@ const tourSchema = new mongoose.Schema(
       type: String,
       require: [true, "description must be number"],
     },
-    guides: Array,
+    guides: [{ type: mongoose.Schema.ObjectId, ref: "foundationUsers" }],
   },
   {
     toJSON: { virtuals: true },
@@ -116,15 +116,23 @@ tourSchema.pre("save", function (next) {
 //   next();
 // });
 
-tourSchema.post("save", function (doc, next) {
-  console.log(doc);
-  next();
-});
-
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
   this.select("-secretTour");
   this.start = Date.now();
+  next();
+});
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "guides",
+    select: "-__v -passwordChangedAt",
+  });
+  next();
+});
+
+tourSchema.post("save", function (doc, next) {
+  console.log(doc);
   next();
 });
 
@@ -137,6 +145,12 @@ tourSchema.virtual("durationWeeks").get(function () {
   return (this.duration / 7).toFixed(2);
 });
 
-const tourModel = mongoose.model("Foundation-Tour", tourSchema);
+tourSchema.virtual("reviews", {
+  ref: "foundationReviews",
+  foreignField: "tour",
+  localField: "_id",
+});
+
+const tourModel = mongoose.model("foundationTours", tourSchema);
 
 module.exports = tourModel;

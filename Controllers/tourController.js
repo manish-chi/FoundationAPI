@@ -1,6 +1,6 @@
 const Tour = require("../Models/tourModel");
 const catchAsync = require("../Utilities/catchAsync");
-const AppError = require('../Utilities/appError');
+const AppError = require("../Utilities/appError");
 
 exports.top5CheapTours = catchAsync(async (req, res, next) => {
   let query = Tour.find();
@@ -66,7 +66,7 @@ exports.getAllTours = catchAsync(async (req, res) => {
 exports.getTour = catchAsync(async (req, res, next) => {
   if (req.params.id == null) throw new Error("request id is missing");
 
-  const tour = await Tour.findById(req.params.id);
+  const tour = await Tour.findById(req.params.id).populate('reviews');
 
   if (!tour) next(new AppError("Tour with given id has not been found", 400));
 
