@@ -19,13 +19,15 @@ app.use(helmet());
 
 app.use(express.json());
 
-app.use(helmet());
-
 app.use(xss());
 
 app.use(mongoSanitize());
 
-app.use(hpp());
+app.use(
+  hpp({
+    whitelist: ["duration"],
+  })
+);
 
 if (process.env.NODE_ENV == "development") {
   app.use(morgan("dev"));

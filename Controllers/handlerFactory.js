@@ -1,5 +1,5 @@
 const catchAsync = require("../Utilities/catchAsync");
-const AppError = require("../Controllers/errorController");
+const AppError = require("../Utilities/appError");
 const AppFeatures = require("../Utilities/appFeatures");
 
 exports.createOne = (Model) =>
@@ -15,9 +15,11 @@ exports.getAll = (Model, selectOptions) =>
   catchAsync(async (req, res, next) => {
     //nested get all reviews on tours
     let filter = {};
-    if (!req.params.tourId) {
+    if (req.params.tourId) {
       filter = { tour: req.params.tourId };
     }
+
+    console.log(filter);
 
     if (selectOptions) query = query.select(selectOptions);
 
@@ -26,7 +28,7 @@ exports.getAll = (Model, selectOptions) =>
     let appFeatures = new AppFeatures(req.query, query)
       .filter()
       .sort()
-      .page()
+      .pagination()
       .limit();
 
     let docs = await appFeatures.query;
@@ -69,19 +71,22 @@ exports.updateOne = (Model) =>
     });
   });
 
-exports.getOne = (Model,popOptions) => catchAsync(async (req, res, next) => {
+exports.getOne = (Model, popOptions) =>
+  catchAsync(async (req, res, next) => {
+    if (!req.params.id) next(new AppError("please provide a valid Id", 400));
 
-    let query = Model.findById(req.params.Id);
+    let query = Model.findById(req.params.id);
 
-    if(popOptions) query = query.populate(popOptions);
+    if (popOptions) query = query.populate(popOptions);
 
     let doc = await query;
 
-    if (!doc) next(new AppError("Document with given id has not been found", 404));
+    if (!doc) {
+      next(new AppError("Document with given id has not been found", 404));
+    }
 
     return res.status(200).json({
-        status: 200,
-        count: tour.length,
-        data: tour,
-      });
-});
+      status: 200,
+      data: doc,
+    });
+  });

@@ -14,7 +14,7 @@ reviewRouter
     reviewController.setTourUserIds,
     reviewController.addReview
   )
-  .get(reviewController.getReviews);
+  .get(reviewController.getAllReviews);
 
 reviewRouter
   .route("/:id")

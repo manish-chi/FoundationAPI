@@ -1,5 +1,5 @@
 function sendErrorDev(err, res) {
-  return res.status(err.statusCode).json({
+  res.status(err.statusCode).json({
     status: err.status,
     error: err,
     message: err.message,
@@ -9,20 +9,20 @@ function sendErrorDev(err, res) {
 
 function sendErrorProd(err, res) {
   if (err.isOperational) {
-    return res.status(err.statusCode).json({
+    res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
     });
   }
 
-  return res.status(500).json({
+  res.status(500).json({
     status: "error",
     message: "Something went wrong",
   });
 }
 
 function sendErrorDuplicates(err, res) {
-  return res.status(400).json({
+  res.status(400).json({
     status: err.status,
     message: `${JSON.stringify(
       err.keyValue
@@ -39,7 +39,6 @@ module.exports = (err, req, res, next) => {
   if (process.env.NODE_ENV == "development") {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV == "production") {
-    console.log(err.statusCode);
     if (err.code === 11000) {
       sendErrorDuplicates(err, res);
     } else {

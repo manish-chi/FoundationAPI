@@ -3,7 +3,7 @@ const catchAsync = require("../Utilities/catchAsync");
 const factory = require("../Controllers/handlerFactory");
 
 exports.top5CheapTours = catchAsync(async (req, res, next) => {
-  let query = Tour.find();
+  let query = tourModel.find();
   query = query.sort({ price: -1 });
   query = query.limit(5);
   let tours = await query;

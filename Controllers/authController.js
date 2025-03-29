@@ -100,7 +100,6 @@ exports.restrictTo = (roles) => {
 };
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
-  console.log("you are doing good job!!!");
 
   const { email } = { ...req.body };
 

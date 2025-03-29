@@ -5,11 +5,15 @@ class AppFeatures {
   }
 
   filter() {
-    let queryObj = [...this.queryString];
+    console.log(this.queryString);
+
+    let queryObj = { ...this.queryString };
 
     let excludedFields = ["page", "limit", "sort"];
 
-    queryObj = excludedFields.forEach((ele) => delete queryObj[ele]);
+    excludedFields.forEach((ele) => delete queryObj[ele]);
+
+    console.log(queryObj);
 
     this.query = this.query.find(queryObj);
 
