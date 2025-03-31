@@ -100,7 +100,6 @@ exports.restrictTo = (roles) => {
 };
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
-
   const { email } = { ...req.body };
 
   const user = await userModel.findOne({ email: email });

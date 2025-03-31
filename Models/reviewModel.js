@@ -14,12 +14,12 @@ const reviewSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.ObjectId,
     ref: "foundationUsers",
-    required : [true,'user id must be provided']
+    required: [true, "user id must be provided"],
   },
   tour: {
     type: mongoose.Schema.ObjectId,
     ref: "foundationTours",
-    required :[true,'tour id must be provided']
+    required: [true, "tour id must be provided"],
   },
 });
 

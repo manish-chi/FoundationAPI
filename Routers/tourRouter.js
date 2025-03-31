@@ -13,8 +13,14 @@ tourRouter.route("/top-5-cheap-tours").get(tourController.top5CheapTours);
 
 tourRouter
   .route("/")
-  .post(authController.restrictTo(["admin"]), tourController.createTour)
+  .post(
+    authController.restrictTo(["admin", "guide"]),
+    tourController.createTour
+  )
   .get(tourController.getAllTours);
+
+
+tourRouter.use(authController.restrictTo(["admin", "guide"]));
 
 tourRouter
   .route("/:id")

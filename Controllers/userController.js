@@ -10,9 +10,7 @@ exports.getAll = factory.getAll(userModel, "name email");
 
 exports.getOne = factory.getOne(userModel);
 
-exports.Me = catchAsync(async (req, res, next) => {
-  return res.status(200).json({
-    status: "success",
-    data: req.user,
-  });
-});
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
